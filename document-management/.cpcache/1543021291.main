@@ -1,0 +1,8 @@
+-m
+eastwood.lint
+{:source-paths,["api"]
+                                                        :add-linters [:unused-namespaces
+                                                        :unused-fn-args
+                                                        :unused-locals
+                                                        :unused-private-vars]
+                                                        :exclude-linters[:reflection]}

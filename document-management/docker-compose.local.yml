@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  app:
+    image: wow/document-management:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    ports:
+      - "8080:8080"
+      - "5432:5432"
+
+    networks:
+      - appnet
+  db:
+    image: postgres:12-alpine
+    container_name: postgresql-prod
+    volumes:
+      - 'pgdata:/var/lib/postgresql/data/'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=document_management
+    command: >
+      sh -c "createdb -U postgres -O postgres document_management && postgres -c 'listen_addresses=0.0.0.0'"
+
+    networks:
+      - appnet
+volumes:
+  pgdata:
+networks: 
+  appnet:

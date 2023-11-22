@@ -1,0 +1,58 @@
+{:paths   ["api" "resources"]
+
+ :deps    {integrant/integrant {:mvn/version "0.8.0"}
+           integrant/repl      {:mvn/version "0.3.1"}
+           org.clojure/data.json {:mvn/version "2.4.0"}
+           io.pedestal/pedestal.service {:mvn/version "0.5.9"}
+           io.pedestal/pedestal.route {:mvn/version "0.5.9"}
+           io.pedestal/pedestal.jetty {:mvn/version "0.5.9"}
+           migratus/migratus {:mvn/version "1.4.6"}
+           org.clojure/tools.logging {:mvn/version "1.2.4"}
+           org.apache.logging.log4j/log4j-api {:mvn/version "2.19.0"}
+           org.apache.logging.log4j/log4j-core {:mvn/version "2.19.0"}
+           org.apache.logging.log4j/log4j-jcl {:mvn/version "2.19.0"}
+           io.github.cognitect-labs/test-runner {:git/tag "v0.5.1"
+                                                 :git/sha "dfb30dd"}
+           jonase/eastwood {:mvn/version "1.3.0"}
+           org.apache.logging.log4j/log4j-layout-template-json
+           {:mvn/version "2.19.0"}
+           org.slf4j/slf4j-nop {:mvn/version "1.7.30"
+                                :exclusions [org.slf4j/slf4j-api]}
+           clj-http/clj-http   {:mvn/version "3.12.3"}
+           jarohen/chime {:mvn/version "0.3.3"}
+        ;;-in-house
+           wow.utils/shared {:local/root "../infrastructure/utils/backend/shared"}
+           wow.utils/sns {:local/root "../infrastructure/utils/backend/sns"}
+           wow.utils/sqs {:local/root "../infrastructure/utils/backend/sqs"}}
+
+ :aliases {:ci
+           {:deps {io.github.seancorfield/build-clj
+                   {:git/tag   "v0.6.7"
+                    :git/sha   "22c2d09"
+                    :deps/root "slim"}}
+            :extra-deps  {io.github.cognitect-labs/test-runner
+                          {:git/tag "v0.5.1"
+                           :git/sha "dfb30dd"}
+                          jonase/eastwood   {:mvn/version "1.3.0"}}
+            :jvm-opts    ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/log4j2-factory"]
+            :extra-paths ["test" "resources"]
+            :ns-default  ci}
+
+           :migrate  {:extra-depth {migratus/migratus {:mvn/version "1.4.6"}}
+                      :jvm-opts    ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/log4j2-factory"
+                                    "-Dlog4j.configurationFile=resources/dev/log4j2.properties"]
+                      :ns-default  dev.migration
+                      :exec-fn     dev.migration/migrate}
+
+           :eastwood {:extra-deps {jonase/eastwood {:mvn/version "1.4.0"}}
+                      :main-opts ["-m" "eastwood.lint" "{:source-paths,[\"api\"]
+                                                        :add-linters [:unused-namespaces
+                                                        :unused-fn-args
+                                                        :unused-locals
+                                                        :unused-private-vars]
+                                                        :exclude-linters[:reflection]}" ]}
+
+           :dev      {:extra-paths ["resources/dev"]
+                      :extra-deps  {integrant/repl {:mvn/version "0.3.1"}}
+                      :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/log4j2-factory"
+                                 "-Dlog4j.configurationFile=resources/dev/log4j2.properties"]}}}

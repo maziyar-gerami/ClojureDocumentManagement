@@ -1,0 +1,29 @@
+{:ds {:qdb {:dbtype "postgres"
+            :dbname "wow"
+            :schema "document_management"
+            :user "postgres"
+            :password "postgres"
+            :dataSourceProperties {:socketTimeout 30
+                                   :read-only? true}}
+      :cdb {:dbtype "postgres"
+            :dbname "wow"
+            :schema "document_management"
+            :user "postgres"
+            :password "postgres"
+            :dataSourceProperties {:socketTimeout 30}}}
+
+ :server {:http/type :jetty
+          :http/host "0.0.0.0"
+          :http/port 8080
+          :http/allowed-origins ["*"]
+          :http/join? false}
+
+ :topic
+ {:arn "arn:aws:sns:us-west-2:664800922883:backend-beta-topic.fifo"
+  :region "us-west-2"}
+
+ :document-management-from-company-queue {:queue-name "backend-delta-queue.fifo"}
+ 
+ :notification-from-all-queue {:queue-name "backend-alpha-queue.fifo"}
+ :company-desk-from-all-queue {:queue-name "backend-beta-queue.fifo"}
+ :worker-desk-from-all-queue {:queue-name "backend-beta-queue.fifo"}}

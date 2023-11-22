@@ -1,0 +1,37 @@
+FROM eclipse-temurin:11-jre-alpine
+WORKDIR /srv
+RUN mkdir -p ./resources
+
+ENV READ_DB_USER="postgres"
+ENV READ_DB_PASS="postgres"
+ENV READ_DB_NAME="wow"
+ENV READ_DB_SOURCE="db"
+ENV READ_DB_TIMEOUT=30
+ENV READ_DB_POOL_SIZE=10
+ENV READ_LEAK_THRESHOLD=1000
+
+ENV WRITE_DB_USER="postgres"
+ENV WRITE_DB_PASS="postgres"
+ENV WRITE_DB_NAME="wow"
+ENV WRITE_DB_SOURCE="postgres"
+ENV WRITE_DB_TIMEOUT=30
+ENV WRITE_DB_POOL_SIZE=10
+ENV WRITE_LEAK_THRESHOLD=1000
+
+ENV SERVER_TYPE=jetty
+ENV SERVER_HOST=0.0.0.0
+ENV SERVER_PORT=8080
+
+ENV QUEUES=backend-alpha-topic.fifo,backend-beta-topic.fifo
+ENV TOPIC=backend-beta-topic.fifo
+
+ENV TZ=GMT
+
+EXPOSE 8080
+
+COPY  /target/document-management-0.1.0-SNAPSHOT.jar .
+
+CMD java \
+	-Dlog4j2.configurationFile=prod/log/log4j2.properties \
+	-Dclojure.tools.logging.factory=clojure.tools.logging.impl/log4j2-factory \
+	-jar document-management-0.1.0-SNAPSHOT.jar

@@ -1,0 +1,2 @@
+-Dclojure.tools.logging.factory=clojure.tools.logging.impl/log4j2-factory
+-Dlog4j.configurationFile=resources/dev/log4j2.properties

@@ -1,0 +1,5 @@
+{:linters
+ {:unresolved-symbol
+  {:exclude [sut]}
+  :invalid-arity
+  {:skip-args [wow.utils.common/-->]}}}
